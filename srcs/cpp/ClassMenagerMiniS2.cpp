@@ -1,15 +1,23 @@
 #include "ClassMenagerMiniS2.hpp"
 /*♡♡♡♡♡♡♡♡♡♡♡CTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
-ClassMenagerMiniS2::ClassMenagerMiniS2(int Handle, const std::vector<int> &pin)
-: _lgpio(Handle), _pin(pin), _claimPin(false), _maskBit(0)
+ClassMenagerMiniS2::ClassMenagerMiniS2(int Handle, const std::vector<int> &pin, Camera *ptrCamera = NULL)
+: _lgpio(Handle), _pinVector(pin), _claimPin(false), _maskBit(0)
 {
-    this->_pinVector = vector<int>(_pin.begin(), _pin.end());
     	
      int h = lgGpiochipOpen(_lgpio);
      if (h < 0)
     {
         throw noOpen();
     }
+	if (_pinVector.empty())
+	{
+		throw errorVector();
+	}
+	_parserVector() 
+	if (ptrCamera)
+	{
+		this->Camera = ptrCamera;
+	}
 }
 /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2::~ClassMenagerMiniS2()
@@ -21,9 +29,8 @@ ClassMenagerMiniS2::~ClassMenagerMiniS2()
 }
 /*♡♡♡♡♡♡♡♡♡♡♡COPY♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2::ClassMenagerMiniS2(const ClassMenagerMiniS2 &src)
-: _lgpio(src._lgpio), _pin(src._pin), _claimPin(false), _maskBit(0)
+: _lgpio(src._lgpio), _pinVector(src._pinVector), _claimPin(false), _maskBit(0)
 {
-    this->_pinVector = vector<int>(_pin.begin(), _pin.end());
     // TODO capire la gestone del claim per i copy e operatore =
 }
 
@@ -42,6 +49,10 @@ bool ClassMenagerMiniS2::intClaimPin()
     _claimPin = true;
     _maskBitPin();
     return true;
+}
+void ClassMenagerMiniS2::_parserVector(){
+	std::sort(_pinVector.begin(), _pinVector.end());
+	// maybe check unique?? 
 }
 
 void ClassMenagerMiniS2::_maskBitPin()
@@ -72,33 +83,64 @@ bool ClassMenagerMiniS2::_allPinOff()
     }
     return true;
 }
-void ClassMenagerMiniS2::sequenceChase()
+
+int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 {
-    if (!_claimPin) return;
+	if (Camera) {
+		if (this->Camera.TakePhoto() < 0){
+			return (ERROR_NO_PHOTO_TAKEN);
+		}
+	}
+	else {
+		usleep(200000); // 200ms
+	}
+	return (OK);
 
-    for (size_t i = 0; i < _pinVector.size(); i++)
-    {
-        uint64_t mask = 1ULL << i;
-
-        // Accendi il pin i
-        lgGroupWrite(_lgpio, _pinVector[0], mask, mask);
-        usleep(200000); // 200ms
-
-        // Spegni il pin i
-        lgGroupWrite(_lgpio, _pinVector[0], 0, mask);
-        usleep(100000); // 100ms
-    }
 }
+
+int ClassMenagerMiniS2::sequenceChase() const
+{
+    if (!_claimPin || this->_maskBitPin != 0) return (ERROR_NO_CLAIM);
+
+
+	if (!_allPinOn()){
+		return (ERROR_NO_WRITE_GROUP)
+	}
+	if (_handelPhotoOrSleep() != 0){
+		return (ERROR_NO_PHOTO_TAKEN);
+	}
+	if (!_allPinOff()){
+		return (ERROR_NO_WRITE_GROUP);
+	}
+
+    for (size_t i = 0; i < _pinVector.size(); i++){
+		uint64_t mask = 1ULL << i;
+
+        if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
+			return (ERROR_NO_WRITE_GROUP)
+		}
+
+		if (_handelPhotoOrSleep() != 0){
+			return (ERROR_NO_PHOTO_TAKEN);
+		}
+
+        if (lgGroupWrite(_lgpio, this->_pinVector[0], 0, mask) < 0){
+			return (ERROR_NO_WRITE_GROUP)
+		}
+		usleep(200000); // 200ms
+    }
+	return (OK);
+}
+
 /*♡♡♡♡♡♡♡♡♡♡♡OPERATOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2 & ClassMenagerMiniS2::operator=(const ClassMenagerMiniS2 &src)
 {
     if (this != &src)
     {
         _lgpio = src._lgpio;
-        _pin = src._pin;
+        _pinVector = src._pinVector;
         // TODO capire la gestone del claim per i copy e operatore = magari bisogna rilasciarli 
         _claimPin = false;
-        this->_pinVector = vector<int>(_pin.begin(), _pin.end());
     }
     return *this;
 }

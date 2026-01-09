@@ -3,13 +3,19 @@
 #include <iostream>
 #include <set>
 #include <vector>
+enum error{
+	ERROR_NO_CLAIM,
+	ERROR_NO_WRITE_GROUP,
+	ERROR_FAILURE_CLAIM_GROUP,
+	OK = 0,
+};
 class ClassMenagerMiniS2
 {
         /*♡♡♡♡♡♡♡♡♡♡♡PRIVATE♡♡♡♡♡♡♡♡♡♡♡♡♡*/
     private:
         const int _lgpio;
-        const std::set<int> _pin;
-        const std::vector<int> _pinVector;
+        //const std::set<int> _pin;
+        std::vector<int> _pinVector;
         uint64_t _maskBit;
         bool _claimPin;
 
@@ -18,9 +24,13 @@ class ClassMenagerMiniS2
         /*♡♡♡♡♡♡♡♡♡♡♡HEANDELPIN♡♡♡♡♡♡♡♡♡♡♡♡♡*/
         bool _allPinOn();
         bool _allPinOff();
-        bool _onePinOn(int pin);
-        bool _onePinOff(int pin);
         void _maskBitPin();
+		void _parserVector();
+		int	_handelPhotoOrSleep();
+
+
+
+		//
 
 
 
@@ -34,8 +44,9 @@ class ClassMenagerMiniS2
          /*♡♡♡♡♡♡♡♡♡♡♡OPERATOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
         ClassMenagerMiniS2 & operator=(const ClassMenagerMiniS2 &src);
 
-        bool intClaimPin();
-        bool sequenzaPin();
+        bool	intClaimPin();
+        int		sequenceChase() const;
+		Camera *Camera = NULL;
 
 
          /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
@@ -46,6 +57,11 @@ class ClassMenagerMiniS2
             const char * what () const throw ()
     };
     class noClose : public std::exception
+    {
+        public:
+            const char * what () const throw ()
+    };
+    class errorVector : public std::exception
     {
         public:
             const char * what () const throw ()
