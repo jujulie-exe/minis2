@@ -1,11 +1,11 @@
 #include "ClassMenagerMiniS2.hpp"
 /*♡♡♡♡♡♡♡♡♡♡♡CTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
-ClassMenagerMiniS2::ClassMenagerMiniS2(int Handle, const std::vector<int> &pin, Camera *ptrCamera = NULL)
-: _lgpio(Handle), _pinVector(pin), _claimPin(false), _maskBit(0)
+ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin, Camera *ptrCamera)
+: _lgpio(-1), _pinVector(pin), _claimPin(false), _maskBit(0)
 {
     	
-     int h = lgGpiochipOpen(_lgpio);
-     if (h < 0)
+     _lgpio = lgGpiochipOpen(ChipSet);
+     if (_lgpio < 0)
     {
         throw noOpen();
     }
@@ -87,7 +87,7 @@ bool ClassMenagerMiniS2::_allPinOff()
 int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 {
 	if (Camera) {
-		if (this->Camera.TakePhoto() < 0){
+		if (this->Camera->TakeFrame() < 0){
 			return (ERROR_NO_PHOTO_TAKEN);
 		}
 	}

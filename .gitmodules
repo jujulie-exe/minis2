@@ -1,0 +1,3 @@
+[submodule "srcs/camera"]
+	path = srcs/camera
+	url = git@github.com:jujulie-exe/v4l2-cpp-capture.git
