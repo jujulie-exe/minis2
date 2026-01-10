@@ -1,7 +1,9 @@
 #include "ClassMenagerMiniS2.hpp"
+#include <algorithm>
+#include <unistd.h>
 /*♡♡♡♡♡♡♡♡♡♡♡CTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin, Camera *ptrCamera)
-: _lgpio(-1), _pinVector(pin), _claimPin(false), _maskBit(0)
+: _lgpio(-1), _pinVector(pin), _maskBit(0), _claimPin(false)
 {
     	
      _lgpio = lgGpiochipOpen(ChipSet);
@@ -13,10 +15,10 @@ ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin,
 	{
 		throw errorVector();
 	}
-	_parserVector() 
+	_parserVector(); 
 	if (ptrCamera)
 	{
-		this->Camera = ptrCamera;
+		this->_camera = ptrCamera;
 	}
 }
 /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
@@ -24,15 +26,11 @@ ClassMenagerMiniS2::~ClassMenagerMiniS2()
 {
     if (lgGpiochipClose(_lgpio) < 0)
     {
-        throw noClose();
+        // Destructors should not throw exceptions
+        std::cerr << "Error: Failed to close GPIO chip" << std::endl;
     }
 }
-/*♡♡♡♡♡♡♡♡♡♡♡COPY♡♡♡♡♡♡♡♡♡♡♡♡♡*/
-ClassMenagerMiniS2::ClassMenagerMiniS2(const ClassMenagerMiniS2 &src)
-: _lgpio(src._lgpio), _pinVector(src._pinVector), _claimPin(false), _maskBit(0)
-{
-    // TODO capire la gestone del claim per i copy e operatore =
-}
+
 
 bool ClassMenagerMiniS2::intClaimPin()
 {
@@ -86,8 +84,8 @@ bool ClassMenagerMiniS2::_allPinOff()
 
 int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 {
-	if (Camera) {
-		if (this->Camera->TakeFrame() < 0){
+	if (_camera) {
+		if (!this->_camera->takeAFrame()){
 			return (ERROR_NO_PHOTO_TAKEN);
 		}
 	}
@@ -98,13 +96,13 @@ int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 
 }
 
-int ClassMenagerMiniS2::sequenceChase() const
+int ClassMenagerMiniS2::sequenceChase()
 {
-    if (!_claimPin || this->_maskBitPin != 0) return (ERROR_NO_CLAIM);
+    if (!_claimPin || this->_maskBit != 0) return (ERROR_NO_CLAIM);
 
 
 	if (!_allPinOn()){
-		return (ERROR_NO_WRITE_GROUP)
+		return (ERROR_NO_WRITE_GROUP);
 	}
 	if (_handelPhotoOrSleep() != 0){
 		return (ERROR_NO_PHOTO_TAKEN);
@@ -117,7 +115,7 @@ int ClassMenagerMiniS2::sequenceChase() const
 		uint64_t mask = 1ULL << i;
 
         if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
-			return (ERROR_NO_WRITE_GROUP)
+			return (ERROR_NO_WRITE_GROUP);
 		}
 
 		if (_handelPhotoOrSleep() != 0){
@@ -125,22 +123,11 @@ int ClassMenagerMiniS2::sequenceChase() const
 		}
 
         if (lgGroupWrite(_lgpio, this->_pinVector[0], 0, mask) < 0){
-			return (ERROR_NO_WRITE_GROUP)
+			return (ERROR_NO_WRITE_GROUP);
 		}
 		usleep(200000); // 200ms
     }
 	return (OK);
 }
 
-/*♡♡♡♡♡♡♡♡♡♡♡OPERATOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
-ClassMenagerMiniS2 & ClassMenagerMiniS2::operator=(const ClassMenagerMiniS2 &src)
-{
-    if (this != &src)
-    {
-        _lgpio = src._lgpio;
-        _pinVector = src._pinVector;
-        // TODO capire la gestone del claim per i copy e operatore = magari bisogna rilasciarli 
-        _claimPin = false;
-    }
-    return *this;
-}
+
