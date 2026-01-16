@@ -4,13 +4,11 @@
 #include <set>
 #include <vector>
 #include "Camera.hpp"
-enum error{
-	ERROR_NO_CLAIM,
-	ERROR_NO_WRITE_GROUP,
-	ERROR_FAILURE_CLAIM_GROUP,
-	ERROR_NO_PHOTO_TAKEN,
-	OK = 0,
-};
+#define ERROR_NO_CLAIM -1
+#define ERROR_NO_WRITE_GROUP -2
+#define ERROR_FAILURE_CLAIM_GROUP -3
+#define ERROR_NO_PHOTO_TAKEN -4
+#define OK 0
 enum class pin : int {
     // TODO mettere solo i pin ch usero nel progetto
     pin_17 = 17,
