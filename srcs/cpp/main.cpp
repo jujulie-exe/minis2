@@ -32,16 +32,20 @@ int main()
         int ret = menager->intClaimPin();
         if (handelError(ret) != OK)
         {
-            return ret;
+            delete menager;
+            return 1;
         }
         ret = menager->sequenceChase();
         if (handelError(ret) != OK)
         {
-            return ret;
+            delete menager;
+            return 1;
         }
     }
     catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << std::endl;
+        delete menager;
+        return 1;
     }
     delete menager;
     return 0;
