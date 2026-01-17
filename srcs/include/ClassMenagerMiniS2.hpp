@@ -1,3 +1,7 @@
+
+#ifndef CLASSMENAGERMINIS2_HPP
+#define CLASSMENAGERMINIS2_HPP
+
 #include <lgpio.h> 
 #include <stdexcept>
 #include <iostream>
@@ -74,3 +78,4 @@ class ClassMenagerMiniS2
             const char * what () const noexcept override { return "Invalid pin vector"; }
     };
 };
+#endif // ♡♡♡CLASSMENAGERMINIS2_HPP♡♡♡

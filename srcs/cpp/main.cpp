@@ -44,7 +44,6 @@ int main()
     }
     catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << std::endl;
-        delete menager;
         return 1;
     }
     delete menager;
