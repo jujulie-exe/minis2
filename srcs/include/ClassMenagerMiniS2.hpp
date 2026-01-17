@@ -3,6 +3,8 @@
 #define CLASSMENAGERMINIS2_HPP
 
 #include <lgpio.h> 
+//#include <rgpio.h> 
+#include <linux/gpio.h>
 #include <stdexcept>
 #include <iostream>
 #include <set>

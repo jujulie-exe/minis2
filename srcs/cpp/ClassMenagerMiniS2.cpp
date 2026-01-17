@@ -34,7 +34,7 @@ ClassMenagerMiniS2::~ClassMenagerMiniS2()
 
 bool ClassMenagerMiniS2::intClaimPin()
 {
-    if( lgGpioGroupClaimOutput(
+    if( lgGroupClaimOutput(
         _lgpio,
         0,
         _pinVector.size(),

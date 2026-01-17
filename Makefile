@@ -12,7 +12,7 @@
 
 NAME = minis2
 
-FLAGS = -Wall -Wextra -Werror -std=c++11 -g3
+FLAGS = -Wall -Wextra -Werror -std=c++17 -g3 
 
 SRCS_DIR = srcs
 OBJS_DIR = objs
@@ -29,11 +29,11 @@ DEPS = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.d)
 all: $(NAME) 
 
 $(NAME): $(OBJS)
-	c++ $(FLAGS) $(OBJS) -o $(NAME)
+	c++ $(FLAGS) $(OBJS) -llgpio -o  $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	c++ $(FLAGS) $(INC) -MMD -MP -c $< -o $@
+	c++ $(FLAGS) $(INC) -MMD -MP -c $< -o  $@
 
 # Include dependency files if they exist
 -include $(DEPS)
