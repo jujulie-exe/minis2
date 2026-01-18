@@ -17,10 +17,15 @@
 #define OK 0
 enum class pin : int {
     // TODO mettere solo i pin ch usero nel progetto
-    pin_17 = 17,
-    pin_27 = 27,
-    pin_22 = 22,
-    pin_23 = 23,
+    GPIO_13 = 13,
+    GPIO_5 = 5,
+    GPIO_26 = 26,
+    GPIO_17 = 17,,
+    GPIO_22 = 22,,
+    GPIO_27 = 27,,
+    GPIO_23 = 23,,
+    GPIO_24 = 24,,
+    GPIO_25 = 25,,
 };
 class ClassMenagerMiniS2
 {

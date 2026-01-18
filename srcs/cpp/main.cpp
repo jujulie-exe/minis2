@@ -24,10 +24,10 @@ int main()
     ClassMenagerMiniS2 *menager = NULL;
     try {
         menager = new ClassMenagerMiniS2(0, {
-            static_cast<int>(pin::pin_17),
-            static_cast<int>(pin::pin_27),
-            static_cast<int>(pin::pin_22),
-            static_cast<int>(pin::pin_23)
+            static_cast<int>(pin::GPIO_5),
+            static_cast<int>(pin::GPIO_13),
+            static_cast<int>(pin::GPIO_26),
+            static_cast<int>(pin::GPIO_17)
         }, NULL);
         int ret = menager->intClaimPin();
         if (handelError(ret) != OK)
