@@ -30,7 +30,13 @@ Camera* CallCammObj(){
 	
 	Camera *cam = NULL;
     try {
-        cam = new Camera("/dev/video0", 640, 480);
+        cam = new Camera("/dev/video0", 2688, 1520);
+        cam->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE);
+        cam->setParameters(V4L2_CID_POWER_LINE_FREQUENCY, 1);
+        cam->setParameters(V4L2_CID_EXPOSURE_AUTO  , DISABLE); 
+        cam->setParameters(V4L2_CID_EXPOSURE_ABSOLUTE, 2047);
+        cam->setParameters(0x009a090c , 0); // focus_automatic_continuous
+         
         Logger::log(Logger::INFO, "camera initialized" );
         
         if (cam->initV4L2() == OK) {

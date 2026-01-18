@@ -128,12 +128,12 @@ int ClassMenagerMiniS2::sequenceChase()
         if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
-
+		usleep(7000000);
 		if (_handelPhotoOrSleep() != 0){
 			return (ERROR_NO_PHOTO_TAKEN);
 		}
-		usleep(2000000); // 200ms
-        if (lgGroupWrite(_lgpio, this->_pinVector[0], 0, mask) < 0){
+		 // 200ms
+        if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
 		usleep(2000000); // 200ms
