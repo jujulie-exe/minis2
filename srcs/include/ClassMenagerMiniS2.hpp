@@ -10,10 +10,11 @@
 #include <set>
 #include <vector>
 #include "Camera.hpp"
-#define ERROR_NO_CLAIM -1
-#define ERROR_NO_WRITE_GROUP -2
-#define ERROR_FAILURE_CLAIM_GROUP -3
-#define ERROR_NO_PHOTO_TAKEN -4
+//
+#define ERROR_NO_CLAIM -10
+#define ERROR_NO_WRITE_GROUP -11
+#define ERROR_FAILURE_CLAIM_GROUP -12
+#define ERROR_NO_PHOTO_TAKEN -13
 #define OK 0
 #define LOW 0
 #define HIGH 1

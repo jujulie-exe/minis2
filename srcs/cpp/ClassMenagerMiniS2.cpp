@@ -93,8 +93,9 @@ int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 	Logger::log(Logger::INFO, "HandlerPhot ♡♡♡♡♡♡♡♡♡♡♡");
 	if (_camera) {
 		Logger::log(Logger::INFO, "Call->takeAFrame ♡♡♡♡♡♡♡♡♡♡♡");
-		if (this->_camera->takeAFrame() != OK){
-			return (ERROR_NO_PHOTO_TAKEN);
+		int ret = this->_camera->takeAFrame();
+		if (ret != OK){
+			return (ret);
 		}
 	}
 	else {
@@ -129,8 +130,9 @@ int ClassMenagerMiniS2::sequenceChase()
 			return (ERROR_NO_WRITE_GROUP);
 		}
 		usleep(7000000);
-		if (_handelPhotoOrSleep() != 0){
-			return (ERROR_NO_PHOTO_TAKEN);
+		int ret = _handelPhotoOrSleep();
+		if (ret != OK){
+			return (ret);
 		}
 		 // 200ms
         if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0){
