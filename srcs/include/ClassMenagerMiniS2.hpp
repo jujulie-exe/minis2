@@ -15,17 +15,19 @@
 #define ERROR_FAILURE_CLAIM_GROUP -3
 #define ERROR_NO_PHOTO_TAKEN -4
 #define OK 0
+#define LOW 0
+#define HIGH 1
 enum class pin : int {
     // TODO mettere solo i pin ch usero nel progetto
-    GPIO_13 = 13,
     GPIO_5 = 5,
+    GPIO_13 = 13,
+    GPIO_17 = 17,
+    GPIO_22 = 22,
+    GPIO_23 = 23,
+    GPIO_24 = 24,
+    GPIO_25 = 25,
     GPIO_26 = 26,
-    GPIO_17 = 17,,
-    GPIO_22 = 22,,
-    GPIO_27 = 27,,
-    GPIO_23 = 23,,
-    GPIO_24 = 24,,
-    GPIO_25 = 25,,
+    GPIO_27 = 27,
 };
 class ClassMenagerMiniS2
 {
@@ -62,7 +64,7 @@ class ClassMenagerMiniS2
          /*♡♡♡♡♡♡♡♡♡♡♡OPERATOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
         ClassMenagerMiniS2 & operator=(const ClassMenagerMiniS2 &src) = delete;
 
-        bool	intClaimPin();
+        int	intClaimPin();
         int		sequenceChase();
 		Camera *_camera = NULL;
 

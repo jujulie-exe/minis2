@@ -19,9 +19,10 @@ OBJS_DIR = objs
 
 SRCS = 	srcs/cpp/main.cpp \
 		srcs/cpp/ClassMenagerMiniS2.cpp \
+		srcs/Logger/srcs/Logger.cpp \
 		srcs/camera/src/Camera.cpp
 
-INC = -I ./srcs/include/ -I ./srcs/camera/include/
+INC = -I ./srcs/include/ -I ./srcs/camera/include/ -I ./srcs/Logger/include/
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.o)
 DEPS = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.d)

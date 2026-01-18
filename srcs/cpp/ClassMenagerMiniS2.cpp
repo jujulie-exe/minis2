@@ -1,4 +1,5 @@
 #include "ClassMenagerMiniS2.hpp"
+#include "Logger.hpp"
 #include <algorithm>
 #include <unistd.h>
 /*♡♡♡♡♡♡♡♡♡♡♡CTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
@@ -20,10 +21,12 @@ ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin,
 	{
 		this->_camera = ptrCamera;
 	}
+	Logger::log(Logger::INFO, "Chiamata costruttore♡♡♡♡♡♡♡♡♡♡♡");
 }
 /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2::~ClassMenagerMiniS2()
 {
+	Logger::log(Logger::INFO, "Chiamata decostruttore♡♡♡♡♡♡♡♡♡♡♡");
     if (lgGpiochipClose(_lgpio) < 0)
     {
         // Destructors should not throw exceptions
@@ -32,21 +35,24 @@ ClassMenagerMiniS2::~ClassMenagerMiniS2()
 }
 
 
-bool ClassMenagerMiniS2::intClaimPin()
+int ClassMenagerMiniS2::intClaimPin()
 {
+	//std::vector<const int> v(8, 1);
+	std::vector<int> v(_pinVector.size(), LOW);
     if( lgGroupClaimOutput(
         _lgpio,
         0,
         _pinVector.size(),
         _pinVector.data(),
-        0
+	v.data()
     ) < 0)
     {
-        return false;
+        return ERROR_NO_CLAIM;
     }
     _claimPin = true;
     _maskBitPin();
-    return true;
+Logger::log(Logger::INFO, "Cliam riuscito! ♡♡♡♡♡♡♡♡♡♡♡");
+    return OK;
 }
 void ClassMenagerMiniS2::_parserVector(){
 	std::sort(_pinVector.begin(), _pinVector.end());
@@ -84,13 +90,16 @@ bool ClassMenagerMiniS2::_allPinOff()
 
 int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 {
+	Logger::log(Logger::INFO, "HandlerPhot ♡♡♡♡♡♡♡♡♡♡♡");
 	if (_camera) {
-		if (!this->_camera->takeAFrame()){
+		Logger::log(Logger::INFO, "Call->takeAFrame ♡♡♡♡♡♡♡♡♡♡♡");
+		if (this->_camera->takeAFrame() != OK){
 			return (ERROR_NO_PHOTO_TAKEN);
 		}
 	}
 	else {
-		usleep(200000); // 200ms
+		Logger::log(Logger::INFO, "Sleep ♡♡♡♡♡♡♡♡♡♡♡");
+		usleep(20000); // 200ms
 	}
 	return (OK);
 
@@ -98,10 +107,12 @@ int	ClassMenagerMiniS2::_handelPhotoOrSleep()
 
 int ClassMenagerMiniS2::sequenceChase()
 {
-    if (!_claimPin || this->_maskBit != 0) return (ERROR_NO_CLAIM);
+    if (!_claimPin || this->_maskBit == 0){
+	    return (ERROR_NO_CLAIM);
+    }
+ Logger::log(Logger::INFO, "Inizio sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
 
-
-	if (!_allPinOn()){
+	/*if (!_allPinOn()){
 		return (ERROR_NO_WRITE_GROUP);
 	}
 	if (_handelPhotoOrSleep() != 0){
@@ -109,7 +120,7 @@ int ClassMenagerMiniS2::sequenceChase()
 	}
 	if (!_allPinOff()){
 		return (ERROR_NO_WRITE_GROUP);
-	}
+	} */
 
     for (size_t i = 0; i < _pinVector.size(); i++){
 		uint64_t mask = 1ULL << i;
@@ -121,12 +132,13 @@ int ClassMenagerMiniS2::sequenceChase()
 		if (_handelPhotoOrSleep() != 0){
 			return (ERROR_NO_PHOTO_TAKEN);
 		}
-
+		usleep(2000000); // 200ms
         if (lgGroupWrite(_lgpio, this->_pinVector[0], 0, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
-		usleep(200000); // 200ms
+		usleep(2000000); // 200ms
     }
+	Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
 	return (OK);
 }
 

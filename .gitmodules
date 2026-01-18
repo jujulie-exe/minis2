@@ -1,3 +1,6 @@
 [submodule "srcs/camera"]
 	path = srcs/camera
 	url = git@github.com:jujulie-exe/v4l2-cpp-capture.git
+[submodule "srcs/Logger"]
+	path = srcs/Logger
+	url = git@github.com:jujulie-exe/Logger_stack.git
