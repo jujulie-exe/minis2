@@ -63,27 +63,66 @@ int handelError(int ret)
     }
     return ret;
 }
-Camera* CallCammObj(){     
+Camera* CallCammObj(){
+	/*
+	♥ User Controls KYO Razer
+	♥ brightness 0x00980900 (int) : min=0 max=255 step=1 default=128 value=128
+	♥ contrast 0x00980901 (int) : min=0 max=255 step=1 default=128 value=128
+	♥ saturation 0x00980902 (int) : min=0 max=255 step=1 default=128 value=128
+	♥ white_balance_automatic 0x0098090c (bool) : default=1 value=1
+	♥ gain 0x00980913 (int) : min=0 max=255 step=1 default=0 value=0
+	♥ power_line_frequency 0x00980918 (menu) : min=0 max=2 default=2 value=1 (50 Hz)
+	♥ white_balance_temperature 0x0098091a (int) : min=2000 max=7500 step=10 default=4000 value=4380 flags=inactive
+	♥ sharpness 0x0098091b (int) : min=0 max=255 step=1 default=128 value=117
+	♥ backlight_compensation 0x0098091c (int) : min=0 max=1 step=1 default=0 value=0
+	♥ 
+	♥ Camera Controls
+	♥ auto_exposure 0x009a0901 (menu) : min=0 max=3 default=3 value=3 (Aperture Priority Mode)
+	♥ exposure_time_absolute 0x009a0902 (int) : min=3 max=2047 step=1 default=3 value=156 flags=inactive
+	♥ exposure_dynamic_framerate 0x009a0903 (bool) : default=0 value=0
+	♥ pan_absolute 0x009a0908 (int) : min=-36000 max=36000 step=3600 default=0 value=0
+	♥ tilt_absolute 0x009a0909 (int) : min=-36000 max=36000 step=3600 default=0 value=0
+	♥ focus_absolute 0x009a090a (int) : min=0 max=255 step=1 default=0 value=255 flags=inactive
+	♥ focus_automatic_continuous 0x009a090c (bool) : default=1 value=1
+	♥ zoom_absolute 0x009a090d (int) : min=100 max=140 step=10 default=100 value=100
+	*/     
 	
 	Camera *cam = NULL;
     try {
         cam = new Camera("/dev/video0", 2688, 1520);
+        // ♥♥ Abilita autofocus per la messa a fuoco iniziale
+        handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE));
+        handelError(cam->setParameters(0x009a090c , 0)); // focus_automatic_continuous
         
-       handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE));
-       handelError(cam->setParameters(V4L2_CID_POWER_LINE_FREQUENCY, 1));
-       handelError(cam->setParameters(V4L2_CID_EXPOSURE_AUTO  , DISABLE)); 
-       handelError(cam->setParameters(V4L2_CID_EXPOSURE_ABSOLUTE, 2047));
-       handelError(cam->setParameters(0x009a090c , 0)); // focus_automatic_continuous
-         
-        Logger::log(Logger::INFO, "camera initialized" );
+        // ♥♥ Imposta frequenza rete elettrica (50Hz)
+        handelError(cam->setParameters(V4L2_CID_POWER_LINE_FREQUENCY, 1));
+        
+        // ♥♥ Disabilita esposizione automatica e imposta esposizione assoluta (2047)
+        handelError(cam->setParameters(V4L2_CID_EXPOSURE_AUTO  , DISABLE)); 
+        handelError(cam->setParameters(V4L2_CID_EXPOSURE_ABSOLUTE, 2047));
+        
+        // ♥♥ Disabilita bilanciamento bianco automatico e imposta temperatura a 5000K (luce ambiente)
+        handelError(cam->setParameters(V4L2_CID_AUTO_WHITE_BALANCE, DISABLE));
+        handelError(cam->setParameters(V4L2_CID_WHITE_BALANCE_TEMPERATURE, 5000));
+        
+        // ♥♥ Disabilita compensazione retroilluminazione
+        handelError(cam->setParameters(V4L2_CID_BACKLIGHT_COMPENSATION, 0));
+        
+        usleep(500000); // 500ms per permettere stabilizzazione camera e focus
+        
+        handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, 0)); // ♥♥ Disabilita autofocus per bloccare la messa a fuoco
+        
+        Logger::log(Logger::INFO, "Configurazione parametri camera completata" );
         int ret = 0;
         if ( (ret = cam->initV4L2()) == OK) {
-            Logger::log(Logger::INFO, "V4L2 initialized" );
-        } else {
+            Logger::log(Logger::INFO, "Sottosistema V4L2 inizializzato con successo" );
+      } else {
 			handelError(ret);
-        }
+            delete cam;
+            return NULL;
+      }
     } catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
+        Logger::log(Logger::ERROR, "Exception: " << e.what() << std::endl;
 		
 		return NULL;
     }
