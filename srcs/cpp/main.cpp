@@ -99,7 +99,7 @@ Camera* CallCammObj(){
         
         // ♥♥ Disabilita esposizione automatica e imposta esposizione assoluta (2047)
         handelError(cam->setParameters(V4L2_CID_EXPOSURE_AUTO  , DISABLE)); 
-        handelError(cam->setParameters(V4L2_CID_EXPOSURE_ABSOLUTE, 2047));
+        handelError(cam->setParameters(V4L2_CID_EXPOSURE_ABSOLUTE, 1000)); // Troppo alto massimo 200ms 
         
         // ♥♥ Disabilita bilanciamento bianco automatico e imposta temperatura a 5000K (luce ambiente)
         handelError(cam->setParameters(V4L2_CID_AUTO_WHITE_BALANCE, DISABLE));
@@ -107,8 +107,6 @@ Camera* CallCammObj(){
         
         // ♥♥ Disabilita compensazione retroilluminazione
         handelError(cam->setParameters(V4L2_CID_BACKLIGHT_COMPENSATION, 0));
-        
-        usleep(500000); // 500ms per permettere stabilizzazione camera e focus
         
         handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, 0)); // ♥♥ Disabilita autofocus per bloccare la messa a fuoco
         
@@ -122,7 +120,7 @@ Camera* CallCammObj(){
             return NULL;
       }
     } catch (const std::exception& e) {
-        Logger::log(Logger::ERROR, "Exception: " << e.what() << std::endl;
+        Logger::log(Logger::ERROR, e.what());
 		
 		return NULL;
     }
@@ -140,7 +138,7 @@ int main(){
     ClassMenagerMiniS2 *menager = NULL;
     try {
         menager = new ClassMenagerMiniS2(0, {
-            static_cast<int>(pin::GPIO_5),
+            static_cast<int>(pin::GPIO_6),
             static_cast<int>(pin::GPIO_13),
             static_cast<int>(pin::GPIO_26),
             static_cast<int>(pin::GPIO_17),

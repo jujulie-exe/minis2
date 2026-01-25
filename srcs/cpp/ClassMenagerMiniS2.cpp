@@ -122,15 +122,24 @@ int ClassMenagerMiniS2::sequenceChase()
 	if (!_allPinOff()){
 		return (ERROR_NO_WRITE_GROUP);
 	} */
-
+	// setto il focus della camere per avere tutte le immagini uguali
+	(_camera->setParameters(V4L2_CID_FOCUS_AUTO, DISABLE));
+	/* for (size_t i = 0; i <= 16; ++i)
+	{
+		_handelPhotoOrSleep();
+	}*/
+	(_camera->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE));
     for (size_t i = 0; i < _pinVector.size(); i++){
 		uint64_t mask = 1ULL << i;
 
         if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
+		{
 		std::string msg = "LED " + std::to_string(i) + " ACCESO (Logic LOW) ♡♡♡";
 		Logger::log(Logger::INFO, msg.c_str());
+		}
+		
 		usleep(7000000);
 		int ret = _handelPhotoOrSleep();
 		if (ret != OK){
@@ -140,6 +149,11 @@ int ClassMenagerMiniS2::sequenceChase()
         if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
+		{
+		std::string msg = "LED " + std::to_string(i) + " SPENTO (Logic HIGH) ♡♡♡";
+		Logger::log(Logger::INFO, msg.c_str());
+		}
+		
 		usleep(2000000); // 200ms
     }
 	Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");

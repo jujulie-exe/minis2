@@ -20,7 +20,7 @@
 #define HIGH 1
 enum class pin : int {
     // TODO mettere solo i pin ch usero nel progetto
-    GPIO_5 = 5,
+    GPIO_6 = 6,
     GPIO_13 = 13,
     GPIO_17 = 17,
     GPIO_22 = 22,
