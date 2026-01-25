@@ -38,7 +38,7 @@ ClassMenagerMiniS2::~ClassMenagerMiniS2()
 int ClassMenagerMiniS2::intClaimPin()
 {
 	//std::vector<const int> v(8, 1);
-	std::vector<int> v(_pinVector.size(), LOW);
+	std::vector<int> v(_pinVector.size(), HIGH);
     if( lgGroupClaimOutput(
         _lgpio,
         0,
@@ -126,16 +126,18 @@ int ClassMenagerMiniS2::sequenceChase()
     for (size_t i = 0; i < _pinVector.size(); i++){
 		uint64_t mask = 1ULL << i;
 
-        if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
+        if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
+		std::string msg = "LED " + std::to_string(i) + " ACCESO (Logic LOW) ♡♡♡";
+		Logger::log(Logger::INFO, msg.c_str());
 		usleep(7000000);
 		int ret = _handelPhotoOrSleep();
 		if (ret != OK){
 			return (ret);
 		}
 		 // 200ms
-        if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0){
+        if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0){
 			return (ERROR_NO_WRITE_GROUP);
 		}
 		usleep(2000000); // 200ms
