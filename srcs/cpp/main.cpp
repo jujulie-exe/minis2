@@ -125,12 +125,10 @@ Camera *CallCammObj(const json &data) {
         0)); // ♥♥ Disabilita autofocus per bloccare la messa a fuoco
 
     Logger::log(Logger::INFO, "Configurazione parametri camera completata♡♡♡♡");
-    int ret = 0;
-    if ((ret = cam->initV4L2()) == OK) {
+    if (handelError(cam->initV4L2() == OK) {
       Logger::log(Logger::INFO,
                   "Sottosistema V4L2 inizializzato con successo♡♡♡♡");
     } else {
-      handelError(ret);
       delete cam;
       return NULL;
     }
@@ -174,14 +172,12 @@ int main() {
     menager = new ClassMenagerMiniS2(
         data["system"]["chipSet"],
         data["system"]["GPIO"].get<std::vector<int>>(), CameraV4L2);
-    int ret = menager->intClaimPin();
-    if (handelError(ret) != OK) {
+    if (handelError(menager->intClaimPin()) != OK) {
       delete menager;
       delete CameraV4L2;
       return 1;
     }
-    ret = menager->sequenceChase();
-    if (handelError(ret) != OK) {
+    if (handelError(menager->sequenceChase()) != OK) {
       delete menager;
       delete CameraV4L2;
       return 1;
