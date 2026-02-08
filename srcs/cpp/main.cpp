@@ -84,19 +84,19 @@ Camera *CallCammObj(const json &data) {
   ♥ auto_exposure x009a0901 (menu) : min=0 max=3
   default=3 value=3 (Aperture Priority Mode)
   ♥ exposure_time_absolute 0x009a0902 (int) : min=3 max=2047 step=1 default=3
-  value=156 flags=inactive ♥ exposure_dynamic_framerate 0x009a0903 (bool) :
-  default=0 value=0 ♥ pan_absolute 0x009a0908 (int) : min=-36000 max=36000
-  step=3600 default=0 value=0 ♥ tilt_absolute 0x009a0909 (int) : min=-36000
-  max=36000 step=3600 default=0 value=0 ♥ focus_absolute 0x009a090a (int) :
-  min=0 max=255 step=1 default=0 value=255 flags=inactive ♥
-  focus_automatic_continuous 0x009a090c (bool) : default=1 value=1 ♥
-  zoom_absolute 0x009a090d (int) : min=100 max=140 step=10 default=100 value=100
+  value=156 flags=inactive
+  ♥ exposure_dynamic_framerate 0x009a0903 (bool) : default=0 value=0
+  ♥ pan_absolute 0x009a0908 (int) : min=-36000 max=36000 step=3600 default=0
+  value=0 ♥ tilt_absolute 0x009a0909 (int) : min=-36000 max=36000 step=3600
+  default=0 value=0 ♥ focus_absolute 0x009a090a (int) : min=0 max=255 step=1
+  default=0 value=255 flags=inactive ♥ focus_automatic_continuous 0x009a090c
+  (bool) : default=1 value=1 ♥ zoom_absolute 0x009a090d (int) : min=100 max=140
+  step=10 default=100 value=100
   */
 
   Camera *cam = NULL;
   try {
-    cam = new Camera(data["camera"]["path"], data["camera"]["width"],
-                     data["camera"]["height"]);
+    cam = new Camera(data["path"], data["width"], data["height"]);
     // ♥♥ Abilita autofocus per la messa a fuoco iniziale
     handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE));
     handelError(
@@ -135,9 +135,8 @@ Camera *CallCammObj(const json &data) {
       return NULL;
     }
   } catch (const std::exception &e) {
-        Logger::log(Logger::ERROR, "Exception: " << e.what() << std::endl;
-		
-		return NULL;
+    Logger::log(Logger::ERROR, e.what());
+    return NULL;
   }
   return cam;
 }
@@ -156,7 +155,7 @@ int main() {
       return 1;
     }
   } catch (const std::exception &e) {
-    Logger::log(Logger::ERROR, "Exception: " << e.what() << std::endl);
+    Logger::log(Logger::ERROR, e.what());
     return 1;
   }
 
@@ -188,7 +187,7 @@ int main() {
       return 1;
     }
   } catch (const std::exception &e) {
-    std::cerr << "Exception: " << e.what() << std::endl;
+    Logger::log(Logger::ERROR, e.what());
     delete CameraV4L2;
     return 1;
   }
