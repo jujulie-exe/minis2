@@ -22,7 +22,7 @@ SRCS = 	srcs/cpp/main.cpp \
 		srcs/Logger/srcs/Logger.cpp \
 		srcs/camera/src/Camera.cpp
 
-INC = -I ./srcs/include/ -I ./srcs/camera/include/ -I ./srcs/Logger/include/
+INC = -I ./srcs/include/ -I ./srcs/camera/include/ -I ./srcs/Logger/include/ -I ./srcs/include/external/
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.o)
 DEPS = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.d)
