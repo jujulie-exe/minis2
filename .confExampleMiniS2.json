@@ -1,0 +1,20 @@
+{
+    "system": {
+        "chipSet": 0,
+        "GPIO": [
+            17,
+            18,
+            27,
+            22,
+            23,
+            24,
+            25,
+            4
+        ]
+    },
+    "camera": {
+        "path": "/dev/video0",
+        "width": 640,
+        "height": 480
+    }
+}
