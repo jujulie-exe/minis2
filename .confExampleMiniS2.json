@@ -1,7 +1,7 @@
 {
     "system": {
         "chipSet": 0,
-        "GPIO": [
+        "gpio": [
             17,
             18,
             27,
@@ -10,11 +10,34 @@
             24,
             25,
             4
-        ]
+        ],
+        "relay_active_low": true,
+        "settle_time_ms": 200
     },
     "camera": {
-        "path": "/dev/video0",
-        "width": 640,
-        "height": 480
+        "width": 1920,
+        "height": 1080,
+        "format": "YUYV",
+        "exposure_manual": {
+            "enabled": true,
+            "value": 5000
+        }
+    },
+    "output": {
+        "save_locally": {
+            "enabled": true,
+            "directory": "./scans/",
+            "prefix": "scan_session_"
+        },
+        "remote_server": {
+            "enabled": false,
+            "ip": "192.168.1.1",
+            "port": 8080,
+            "endpoint": "/upload"
+        }
+    },
+    "validation": {
+        "focus_check": true,
+        "min_focus_threshold": 50.5
     }
 }

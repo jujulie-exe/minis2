@@ -2,7 +2,9 @@
 #ifndef CLASSMENAGERMINIS2_HPP
 #define CLASSMENAGERMINIS2_HPP
 
+#include "ConfigKeys.hpp"
 #include "nlohmann/json.hpp"
+#include <cstdint>
 #include <lgpio.h>
 // #include <rgpio.h>
 #include "Camera.hpp"
@@ -19,6 +21,7 @@
 #define OK 0
 #define LOW 0
 #define HIGH 1
+
 enum class pin : int {
   // TODO mettere solo i pin ch usero nel progetto
   GPIO_6 = 6,
@@ -39,6 +42,8 @@ private:
   std::vector<int> _pinVector;
   uint64_t _maskBit;
   bool _claimPin;
+  json _outputData;
+  json _systemData;
 
   /*♡♡♡♡♡♡♡♡♡♡♡HEANDELPIN♡♡♡♡♡♡♡♡♡♡♡♡♡*/
   bool _allPinOn();
@@ -46,6 +51,8 @@ private:
   void _maskBitPin();
   void _parserVector();
   int _handelPhotoOrSleep();
+  void _initSystemData();
+  void _initOutputData();
 
   //
 
@@ -54,6 +61,7 @@ public:
   /*♡♡♡♡♡♡♡♡♡♡♡CTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
   ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin,
                      Camera *ptrCamera);
+  ClassMenagerMiniS2(const json &data, Camera *ptrCamera);
   /*♡♡♡♡♡♡♡♡♡♡♡COPY♡♡♡♡♡♡♡♡♡♡♡♡♡*/
   ClassMenagerMiniS2(const ClassMenagerMiniS2 &src) = delete;
   /*♡♡♡♡♡♡♡♡♡♡♡OPERATOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
