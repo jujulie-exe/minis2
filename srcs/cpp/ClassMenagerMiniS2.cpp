@@ -169,6 +169,35 @@ int ClassMenagerMiniS2::_LOWReleSequentially(){
   Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
   return (OK);
 }
+int ClassMenagerMiniS2::_HIGHReleSequentially(){
+  for (size_t i = 0; i < _pinVector.size(); i++) {
+    uint64_t mask = 1ULL << i;
+
+    if (lgGroupWrite(_lgpio, this->_pinVector[0], mask, mask) < 0) {
+      return (ERROR_NO_WRITE_GROUP);
+    }
+    {
+      std::string msg = "LED " + std::to_string(i) + " ACCESO  ♡♡♡";
+      Logger::log(Logger::INFO, msg.c_str());
+    }
+
+    usleep(this->_systemData[ConfigKeys::System::SETTLE_TIME_MS]);
+    int ret = _handelPhotoOrSleep();
+    if (ret != OK) {
+      return (ret);
+    }
+    // 200ms
+    if (lgGroupWrite(_lgpio, this->_pinVector[0], LOW, mask) < 0) {
+      return (ERROR_NO_WRITE_GROUP);
+    }
+    {
+      std::string msg = "LED " + std::to_string(i) + " SPENTO  ♡♡♡";
+      Logger::log(Logger::INFO, msg.c_str());
+    }
+  }
+  Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
+  return (OK);
+}
 
 int ClassMenagerMiniS2::sequenceChase() {
   if (!_claimPin || this->_maskBit == 0) {

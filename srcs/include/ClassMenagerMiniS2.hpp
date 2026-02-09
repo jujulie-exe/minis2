@@ -44,6 +44,7 @@ private:
   bool _claimPin;
   json _systemData;
   json _outputData;
+  Camera *_camera = NULL;
   
 
   /*♡♡♡♡♡♡♡♡♡♡♡HEANDELPIN♡♡♡♡♡♡♡♡♡♡♡♡♡*/
@@ -54,8 +55,8 @@ private:
   int _handelPhotoOrSleep();
   void _initSystemData();
   void _initOutputData();
-  int _LOWReleSequentially()
-  int _HIGHReleSequentially()
+  int _LOWReleSequentially();
+  int _HIGHReleSequentially();
   //
 
   /*♡♡♡♡♡♡♡♡♡♡♡PUBLIC♡♡♡♡♡♡♡♡♡♡♡♡♡*/
@@ -72,7 +73,8 @@ public:
   static int parserData(json data);
   int intClaimPin();
   int sequenceChase();
-  Camera *_camera = NULL;
+  //TODO esporre i metodi di di cam SetParametre e Get
+  
 
   /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
   virtual ~ClassMenagerMiniS2();
