@@ -19,7 +19,7 @@ ClassMenagerMiniS2::ClassMenagerMiniS2(const json &data, Camera *ptrCamera)
   if (ptrCamera) {
     this->_camera = ptrCamera;
   }
-  Logger::log(Logger::INFO, "Chiamata costruttore♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Chiamata costruttore");
 }
 
 ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin,
@@ -38,13 +38,13 @@ ClassMenagerMiniS2::ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin,
   if (ptrCamera) {
     this->_camera = ptrCamera;
   }
-  Logger::log(Logger::INFO, "Chiamata costruttore♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Chiamata costruttore");
 }
 /*♡♡♡♡♡♡♡♡♡♡♡DTOR♡♡♡♡♡♡♡♡♡♡♡♡♡*/
 ClassMenagerMiniS2::~ClassMenagerMiniS2() {
-  Logger::log(Logger::INFO, "Chiamata decostruttore♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Chiamata decostruttore");
   if (lgGpiochipClose(_lgpio) < 0) {
-    Logger::log(Logger::ERROR, "Error: Failed to close GPIO chip♡♡♡♡");
+    Logger::log(Logger::ERROR, "Error: Failed to close GPIO chip");
     // Destructors should not throw exceptions
   }
 }
@@ -86,7 +86,7 @@ int ClassMenagerMiniS2::intClaimPin() {
   }
   _claimPin = true;
   _maskBitPin();
-  Logger::log(Logger::INFO, "Cliam riuscito! ♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Cliam riuscito!");
   return OK;
 }
 void ClassMenagerMiniS2::_parserVector() {
@@ -117,10 +117,10 @@ bool ClassMenagerMiniS2::_allPinOff() {
 }
 
 int ClassMenagerMiniS2::_handelPhotoOrSleep() {
-  Logger::log(Logger::INFO, "HandlerPhot ♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "HandlerPhot");
   if (_camera && (_outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::ENABLED] 
               || _outputData[ConfigKeys::Output::REMOTE_SERVER][ConfigKeys::Output::RemoteServer::ENABLED])) {
-    Logger::log(Logger::INFO, "Call->takeAFrame ♡♡♡♡♡♡♡♡♡♡♡");
+    Logger::log(Logger::INFO, "Call->takeAFrame");
     //int ret = this->_camera->takeAFrame(salvataggio, nomeDellaLavorazione, NomeCartella);
     //int ret = this->_camera->takeAFrame(salvataggio, _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::PREFIX], _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::DIRECTORY]);
     int ret = this->_camera->takeAFrame();
@@ -128,7 +128,7 @@ int ClassMenagerMiniS2::_handelPhotoOrSleep() {
       return (ret);
     }
   } else {
-    Logger::log(Logger::INFO, "Sleep ♡♡♡♡♡♡♡♡♡♡♡");
+    Logger::log(Logger::INFO, "Sleep");
     usleep(20000); // 200ms
   }
   return (OK);
@@ -148,7 +148,7 @@ int ClassMenagerMiniS2::_LOWReleSequentially(){
       return (ERROR_NO_WRITE_GROUP);
     }
     {
-      std::string msg = "LED " + std::to_string(i) + " ACCESO  ♡♡♡";
+      std::string msg = "LED " + std::to_string(i) + " ACCESO";
       Logger::log(Logger::INFO, msg.c_str());
     }
 
@@ -162,11 +162,11 @@ int ClassMenagerMiniS2::_LOWReleSequentially(){
       return (ERROR_NO_WRITE_GROUP);
     }
     {
-      std::string msg = "LED " + std::to_string(i) + " SPENTO  ♡♡♡";
+      std::string msg = "LED " + std::to_string(i) + " SPENTO";
       Logger::log(Logger::INFO, msg.c_str());
     }
   }
-  Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Fine sequenza di acqusizione");
   return (OK);
 }
 int ClassMenagerMiniS2::_HIGHReleSequentially(){
@@ -177,7 +177,7 @@ int ClassMenagerMiniS2::_HIGHReleSequentially(){
       return (ERROR_NO_WRITE_GROUP);
     }
     {
-      std::string msg = "LED " + std::to_string(i) + " ACCESO  ♡♡♡";
+      std::string msg = "LED " + std::to_string(i) + " ACCESO";
       Logger::log(Logger::INFO, msg.c_str());
     }
 
@@ -191,11 +191,11 @@ int ClassMenagerMiniS2::_HIGHReleSequentially(){
       return (ERROR_NO_WRITE_GROUP);
     }
     {
-      std::string msg = "LED " + std::to_string(i) + " SPENTO  ♡♡♡";
+      std::string msg = "LED " + std::to_string(i) + " SPENTO";
       Logger::log(Logger::INFO, msg.c_str());
     }
   }
-  Logger::log(Logger::INFO, "Fine sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Fine sequenza di acqusizione");
   return (OK);
 }
 
@@ -203,7 +203,7 @@ int ClassMenagerMiniS2::sequenceChase() {
   if (!_claimPin || this->_maskBit == 0) {
     return (ERROR_NO_CLAIM);
   }
-  Logger::log(Logger::INFO, "Inizio sequenza di acqusizione ♡♡♡♡♡♡♡♡♡♡♡");
+  Logger::log(Logger::INFO, "Inizio sequenza di acqusizione");
   if (_systemData[ConfigKeys::System::RELAY_ACTIVE_LOW]){
     return _LOWReleSequentially();
   }
@@ -216,17 +216,17 @@ int ClassMenagerMiniS2::sequenceChase() {
 static bool checkTipeDataCamera(json dataCamera) {
   if (!dataCamera.contains(ConfigKeys::Camera::PATH)) {
     Logger::log(Logger::ERROR,
-                "Error: Missing 'path' key inside camera! ♡♡♡♡♡♡♡");
+                "Error: Missing 'path' key inside camera!");
     return (false);
   }
   if (!dataCamera.contains(ConfigKeys::Camera::WIDTH)) {
     Logger::log(Logger::ERROR,
-                "Error: Missing 'width' key inside camera! ♡♡♡♡♡♡♡");
+                "Error: Missing 'width' key inside camera!");
     return (false);
   }
   if (!dataCamera.contains(ConfigKeys::Camera::HEIGHT)) {
     Logger::log(Logger::ERROR,
-                "Error: Missing 'height' key inside camera! ♡♡♡♡♡♡♡");
+                "Error: Missing 'height' key inside camera!");
     return (false);
   }
   if (dataCamera[ConfigKeys::Camera::PATH].is_string() &&
@@ -243,16 +243,16 @@ static bool checkTipeDataCamera(json dataCamera) {
 static bool checkTipeDataSystem(json dataSystem) {
   if (!dataSystem.contains(ConfigKeys::System::CHIPSET)) {
     Logger::log(Logger::ERROR,
-                "Error: Missing 'chipSet' key inside System! ♡♡♡♡♡♡♡");
+                "Error: Missing 'chipSet' key inside System!");
     return (false);
   }
   if (!dataSystem.contains(ConfigKeys::System::GPIO)) {
     Logger::log(Logger::ERROR,
-                "Error: Missing 'gpio' key inside System! ♡♡♡♡♡♡♡");
+                "Error: Missing 'gpio' key inside System!");
     return (false);
   }
   if (!dataSystem[ConfigKeys::System::GPIO].is_array()) {
-    Logger::log(Logger::ERROR, "Error: gpio must be an array type! ♡♡♡♡♡♡♡");
+    Logger::log(Logger::ERROR, "Error: gpio must be an array type!");
     return (false);
   }
   return (true);
@@ -267,7 +267,7 @@ int ClassMenagerMiniS2::parserData(json data) {
     Logger::log(Logger::ERROR,
                 "Error: 'camera' or 'System' must be a JSON object!  and "
                 "contain System: {GPIO: []} and camera: {path: "
-                ", width: 0, height: 0}! ♡♡♡♡♡♡♡");
+                ", width: 0, height: 0}!");
     return 1;
   }
 

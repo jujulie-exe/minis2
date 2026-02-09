@@ -9,58 +9,58 @@ int handelError(int ret) {
     // ERROR GPIO
     if (ret == ERROR_NO_CLAIM) {
       Logger::log(Logger::ERROR,
-                  "♡ ERROR_NO_CLAIM: GPIO initialization failed. Check if pins "
-                  "are available/exported. ♡");
+                  "ERROR_NO_CLAIM: GPIO initialization failed. Check if pins "
+                  "are available/exported.");
     }
     if (ret == ERROR_NO_WRITE_GROUP) {
-      Logger::log(Logger::ERROR, "♡ ERROR_NO_WRITE_GROUP: Writing to GPIO "
-                                 "group failed. Check hardware/logic. ♡");
+      Logger::log(Logger::ERROR, "ERROR_NO_WRITE_GROUP: Writing to GPIO "
+                                 "group failed. Check hardware/logic. ");
     }
     if (ret == ERROR_FAILURE_CLAIM_GROUP) {
-      Logger::log(Logger::ERROR, "♡ ERROR_FAILURE_CLAIM_GROUP: Claiming GPIO "
-                                 "group failed. Driver configuration error? ♡");
+      Logger::log(Logger::ERROR, "ERROR_FAILURE_CLAIM_GROUP: Claiming GPIO "
+                                 "group failed. Driver configuration error?");
     }
     // ERROR CAMERA
     if (ret == ERROR_NO_PHOTO_TAKEN) {
-      Logger::log(Logger::ERROR, "♡ ERROR_NO_PHOTO_TAKEN: No photo captured. "
-                                 "Camera stream might be unresponsive. ♡");
+      Logger::log(Logger::ERROR, "ERROR_NO_PHOTO_TAKEN: No photo captured. "
+                                 "Camera stream might be unresponsive. ");
     }
     if (ret == ERROR_SET_FMT) {
-      Logger::log(Logger::ERROR, "♡ ERROR_SET_FMT: Camera format setup failed. "
-                                 "Check supported resolution/pixel format. ♡");
+      Logger::log(Logger::ERROR, "ERROR_SET_FMT: Camera format setup failed. "
+                                 "Check supported resolution/pixel format.");
     }
     if (ret == ERROR_REQ_BUFFER) {
-      Logger::log(Logger::ERROR, "♡ ERROR_REQ_BUFFER: Memory buffer request "
-                                 "failed. Video device busy or no memory. ♡");
+      Logger::log(Logger::ERROR, "ERROR_REQ_BUFFER: Memory buffer request "
+                                 "failed. Video device busy or no memory.");
     }
     if (ret == ERROR_QBUF) {
-      Logger::log(Logger::ERROR, "♡ ERROR_QBUF: Enqueue buffer failed. Video "
-                                 "stream might be interrupted. ♡");
+      Logger::log(Logger::ERROR, "ERROR_QBUF: Enqueue buffer failed. Video "
+                                 "stream might be interrupted.");
     }
     if (ret == ERROR_DQBUF) {
-      Logger::log(Logger::ERROR, "♡ ERROR_DQBUF: Dequeue buffer failed. Cannot "
-                                 "retrieve frame from camera. ♡");
+      Logger::log(Logger::ERROR, "ERROR_DQBUF: Dequeue buffer failed. Cannot "
+                                 "retrieve frame from camera.");
     }
     if (ret == ERROR_EPOLL_CREATE) {
       Logger::log(Logger::ERROR,
-                  "♡ ERROR_EPOLL_CREATE: System call epoll_create failed. "
-                  "Check system resources. ♡");
+                  "ERROR_EPOLL_CREATE: System call epoll_create failed. "
+                  "Check system resources.");
     }
     if (ret == ERROR_CTL_EPOLL) {
-      Logger::log(Logger::ERROR, "♡ ERROR_CTL_EPOLL: Epoll control failed. "
-                                 "Camera file descriptor might be closed. ♡");
+      Logger::log(Logger::ERROR, "ERROR_CTL_EPOLL: Epoll control failed. "
+                                 "Camera file descriptor might be closed.");
     }
     if (ret == ERROR_OFSTREM_NON_OPEN) {
-      Logger::log(Logger::ERROR, "♡ ERROR_OFSTREM_NON_OPEN: Cannot open output "
-                                 "file. Check disk space/permissions. ♡");
+      Logger::log(Logger::ERROR, "ERROR_OFSTREM_NON_OPEN: Cannot open output "
+                                 "file. Check disk space/permissions.");
     }
     if (ret == TIME_OUT) {
-      Logger::log(Logger::ERROR, "♡ TIME_OUT: Camera frame timeout. No data "
-                                 "received within limit. Stuck? ♡");
+      Logger::log(Logger::ERROR, "TIME_OUT: Camera frame timeout. No data "
+                                 "received within limit. Stuck?");
     }
     if (ret == ERROR_NO_SET_CTRL) {
       Logger::log(Logger::WARNING,
-                  "♡ ERROR_NO_SET_CTRL: Check if control is available. ♡");
+                  "ERROR_NO_SET_CTRL: Check if control is available.");
     }
   }
   return ret;
@@ -124,10 +124,10 @@ Camera *CallCammObj(const json &data) {
         V4L2_CID_FOCUS_AUTO,
         0)); // ♥♥ Disabilita autofocus per bloccare la messa a fuoco
 
-    Logger::log(Logger::INFO, "Configurazione parametri camera completata♡♡♡♡");
+    Logger::log(Logger::INFO, "Configurazione parametri camera completata");
     if (handelError(cam->initV4L2() == OK)) {
       Logger::log(Logger::INFO,
-                  "Sottosistema V4L2 inizializzato con successo♡♡♡♡");
+                  "Sottosistema V4L2 inizializzato con successo");
     } else {
       delete cam;
       return NULL;
@@ -159,13 +159,13 @@ int main() {
 
   Camera *CameraV4L2 = CallCammObj(data[ConfigKeys::CAMERA]);
   if (CameraV4L2 == NULL) {
-    Logger::log(Logger::ERROR, "Failed initialized camera♡♡♡♡");
+    Logger::log(Logger::ERROR, "Failed initialized camera");
     return 1;
   }
-  /* ♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+  /* 
   ClassMenagerMiniS2(int ChipSet, const std::vector<int> &pin, Camera
-  *ptrCamera) ♡♡♡♡
-  ♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+  *ptrCamera) 
+  
 */
   ClassMenagerMiniS2 *menager = NULL;
   try {
