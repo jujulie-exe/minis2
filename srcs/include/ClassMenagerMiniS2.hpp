@@ -3,7 +3,7 @@
 #define CLASSMENAGERMINIS2_HPP
 
 #include "ConfigKeys.hpp"
-#include "nlohmann/json.hpp"
+#include "json.hpp"
 #include <cstdint>
 #include <lgpio.h>
 // #include <rgpio.h>
@@ -13,7 +13,7 @@
 #include <set>
 #include <stdexcept>
 #include <vector>
-//
+using json = nlohmann::json;
 #define ERROR_NO_CLAIM -10
 #define ERROR_NO_WRITE_GROUP -11
 #define ERROR_FAILURE_CLAIM_GROUP -12
@@ -42,8 +42,9 @@ private:
   std::vector<int> _pinVector;
   uint64_t _maskBit;
   bool _claimPin;
-  json _outputData;
   json _systemData;
+  json _outputData;
+  
 
   /*♡♡♡♡♡♡♡♡♡♡♡HEANDELPIN♡♡♡♡♡♡♡♡♡♡♡♡♡*/
   bool _allPinOn();
@@ -53,7 +54,8 @@ private:
   int _handelPhotoOrSleep();
   void _initSystemData();
   void _initOutputData();
-
+  int _LOWReleSequentially()
+  int _HIGHReleSequentially()
   //
 
   /*♡♡♡♡♡♡♡♡♡♡♡PUBLIC♡♡♡♡♡♡♡♡♡♡♡♡♡*/

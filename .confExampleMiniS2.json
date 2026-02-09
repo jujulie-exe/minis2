@@ -12,9 +12,10 @@
             4
         ],
         "relay_active_low": true,
-        "settle_time_ms": 200
+        "settle_time_ms": 20000
     },
     "camera": {
+        "path": "/dev/video0",
         "width": 1920,
         "height": 1080,
         "format": "YUYV",

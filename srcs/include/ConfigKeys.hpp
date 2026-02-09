@@ -11,6 +11,7 @@ namespace System {
 constexpr const char *CHIPSET = "chipSet";
 constexpr const char *GPIO = "gpio";
 constexpr const char *RELAY_ACTIVE_LOW = "relay_active_low";
+constexpr const char *SETTLE_TIME_MS = "settle_time_ms";
 } // namespace System
 
 // Camera Section
@@ -19,7 +20,7 @@ namespace Camera {
 constexpr const char *WIDTH = "width";
 constexpr const char *HEIGHT = "height";
 constexpr const char *FORMAT = "format";
-constexpr const char *SETTLE_TIME_MS = "settle_time_ms";
+
 
 constexpr const char *EXPOSURE_MANUAL = "exposure_manual";
 namespace ExposureManual {

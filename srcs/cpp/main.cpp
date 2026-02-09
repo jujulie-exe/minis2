@@ -96,7 +96,7 @@ Camera *CallCammObj(const json &data) {
 
   Camera *cam = NULL;
   try {
-    cam = new Camera(data["path"], data["width"], data["height"]);
+    cam = new Camera(data[ConfigKeys::Camera::PATH], data[ConfigKeys::Camera::HEIGHT], data[ConfigKeys::Camera::WIDTH]);
     // ♥♥ Abilita autofocus per la messa a fuoco iniziale
     handelError(cam->setParameters(V4L2_CID_FOCUS_AUTO, ENABLE));
     handelError(
@@ -125,7 +125,7 @@ Camera *CallCammObj(const json &data) {
         0)); // ♥♥ Disabilita autofocus per bloccare la messa a fuoco
 
     Logger::log(Logger::INFO, "Configurazione parametri camera completata♡♡♡♡");
-    if (handelError(cam->initV4L2() == OK) {
+    if (handelError(cam->initV4L2() == OK)) {
       Logger::log(Logger::INFO,
                   "Sottosistema V4L2 inizializzato con successo♡♡♡♡");
     } else {
@@ -157,7 +157,7 @@ int main() {
     return 1;
   }
 
-  Camera *CameraV4L2 = CallCammObj(data["camera"]);
+  Camera *CameraV4L2 = CallCammObj(data[ConfigKeys::CAMERA]);
   if (CameraV4L2 == NULL) {
     Logger::log(Logger::ERROR, "Failed initialized camera♡♡♡♡");
     return 1;
@@ -169,9 +169,7 @@ int main() {
 */
   ClassMenagerMiniS2 *menager = NULL;
   try {
-    menager = new ClassMenagerMiniS2(
-        data["system"]["chipSet"],
-        data["system"]["GPIO"].get<std::vector<int>>(), CameraV4L2);
+    menager = new ClassMenagerMiniS2(data, CameraV4L2);
     if (handelError(menager->intClaimPin()) != OK) {
       delete menager;
       delete CameraV4L2;
