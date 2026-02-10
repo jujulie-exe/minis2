@@ -122,8 +122,8 @@ int ClassMenagerMiniS2::_handelPhotoOrSleep() {
               || _outputData[ConfigKeys::Output::REMOTE_SERVER][ConfigKeys::Output::RemoteServer::ENABLED])) {
     Logger::log(Logger::INFO, "Call->takeAFrame");
     //int ret = this->_camera->takeAFrame(salvataggio, nomeDellaLavorazione, NomeCartella);
-    //int ret = this->_camera->takeAFrame(salvataggio, _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::PREFIX], _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::DIRECTORY]);
-    int ret = this->_camera->takeAFrame();
+    int ret = this->_camera->takeAFrame(SAVE_LOCAL, _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::PREFIX], _outputData[ConfigKeys::Output::SAVE_LOCALLY][ConfigKeys::Output::SaveLocally::DIRECTORY]);
+    //int ret = this->_camera->takeAFrame();
     if (ret != OK) {
       return (ret);
     }
